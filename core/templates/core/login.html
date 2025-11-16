@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}RoadGenie | Login{% endblock %}
+
+{% block content %}
+<div class="hero-gradient min-h-screen flex items-center justify-center p-4">
+    <div class="bg-card w-full max-w-md mx-auto p-8 rounded-2xl shadow-medium transform transition duration-500 hover:scale-[1.01] animate-in slide-in-from-top-12">
+        
+        <div class="text-center mb-8">
+            <svg class="w-12 h-12 mx-auto text-secondary mb-2" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 00.183.954L3 18h14l-.089-.046a1 1 0 00.183-.954l-7-14z" />
+            </svg>
+            <h1 class="text-3xl font-extrabold text-heading">Welcome Back</h1>
+            <p class="text-paragraph mt-2">Sign in to access your AI Smart Companion.</p>
+        </div>
+
+        <!-- This form submits to the Django view (login_user) -->
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="space-y-6">
+                <div>
+                    <label for="id_email" class="block text-sm font-medium text-muted mb-2">Email Address</label>
+                    <input type="email" name="email" id="id_email" required 
+                           class="w-full p-3 border border-divider rounded-xl shadow-soft focus:border-primary-end focus:ring-1 focus:ring-primary-end transition duration-200 text-paragraph bg-background-light">
+                </div>
+
+                <div>
+                    <label for="id_password" class="block text-sm font-medium text-muted mb-2">Password</label>
+                    <input type="password" name="password" id="id_password" required 
+                           class="w-full p-3 border border-divider rounded-xl shadow-soft focus:border-primary-end focus:ring-1 focus:ring-primary-end transition duration-200 text-paragraph bg-background-light">
+                </div>
+
+                <button type="submit"
+                        class="btn-primary-glow w-full py-3 px-6 rounded-xl text-lg font-bold tracking-wider">
+                    Login
+                </button>
+            </div>
+        </form>
+
+        <p class="mt-8 text-center text-paragraph text-sm">
+            Don't have an account? 
+            <a href="{% url 'signup' %}" class="text-primary-end font-semibold hover:underline transition duration-150">Create Account</a>
+        </p>
+
+    </div>
+</div>
+{% endblock content %}

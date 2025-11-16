@@ -1,0 +1,79 @@
+/*
+ * Custom CSS for RoadGenie
+ * Defines animations and custom utility classes
+ */
+
+/* 1. Keyframe Animation for the Glowing Button Effect */
+@keyframes glowing {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
+}
+
+/* 2. Custom Button Class for Gradient Glow */
+.btn-primary-glow {
+    /* Define the gradient based on the theme colors */
+    background: linear-gradient(90deg, #7F5AF0, #6246EA, #7F5AF0);
+    background-size: 400% 400%;
+    color: white;
+    border: none;
+    box-shadow: 0 4px 15px rgba(98, 70, 234, 0.4);
+    transition: all 0.3s ease;
+}
+
+.btn-primary-glow:hover {
+    /* Start the glowing animation on hover */
+    animation: glowing 8s ease-in-out infinite;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(98, 70, 234, 0.6);
+}
+
+.btn-primary-glow:disabled {
+    opacity: 0.6;
+    animation: none;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* 3. Hero Section Gradient */
+.hero-gradient {
+    /* Purple-Blue Gradient Vibe */
+    background: linear-gradient(135deg, #7F5AF0 0%, #2CBDFE 100%);
+}
+
+/* 4. Custom Scrollbar for Chat */
+.chat-scroll {
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: theme('colors.primary-end') theme('colors.background-light'); /* Firefox */
+}
+
+.chat-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-scroll::-webkit-scrollbar-track {
+    background: theme('colors.background-light');
+}
+
+.chat-scroll::-webkit-scrollbar-thumb {
+    background-color: theme('colors.primary-end');
+    border-radius: 20px;
+    border: 1px solid theme('colors.background-light');
+}
+
+/* 5. Simple Fade-in Animation for messages */
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 6. Tailwind Custom Utility Classes for Colors */
+.text-heading { color: #1A1A2E; }
+.text-paragraph { color: #4A4E69; }
+.text-muted { color: #6A6B75; }
+.bg-card { background-color: #FFFFFF; }
+.bg-background { background-color: #F7F8FC; }
+.border-divider { border-color: #E6E8F0; }

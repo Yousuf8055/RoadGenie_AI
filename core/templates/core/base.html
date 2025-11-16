@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}RoadGenie | AI Companion{% endblock %}</title>
+    
+    <!-- Tailwind CSS JIT Configuration (Injecting Custom Colors) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Primary Purple Gradient
+                        'primary-start': '#7F5AF0', 
+                        'primary-end': '#6246EA',
+                        // Secondary Blue Accent
+                        'secondary': '#2CBDFE',
+                        // Backgrounds and Surfaces
+                        'background-light': '#F7F8FC',
+                        'card': '#FFFFFF',
+                        'divider': '#E6E8F0',
+                        // Typography Colors
+                        'heading': '#1A1A2E',
+                        'paragraph': '#4A4E69',
+                        'muted': '#6A6B75',
+                        // Accent/Status Colors
+                        'success': '#2EE59D',
+                        'warning': '#FFD93D',
+                        'error': '#FF5D5D',
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 12px rgba(0, 0, 0, 0.05)',
+                        'medium': '0 8px 25px rgba(0, 0, 0, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <!-- Link to custom CSS -->
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background-light antialiased min-h-screen">
+
+    <main class="w-full h-full">
+        <!-- Django Messages for Auth Feedback (Success/Error/Info) -->
+        {% if messages %}
+            <div class="fixed top-0 left-1/2 -translate-x-1/2 z-50 mt-4 p-4 rounded-xl shadow-medium flex items-center space-x-3 fade-in" style="min-width: 300px;">
+                {% for message in messages %}
+                    {% if message.tags == 'success' %}
+                        <div class="bg-success/90 text-white p-3 rounded-xl">
+                            <span class="font-semibold">{{ message }}</span>
+                        </div>
+                    {% elif message.tags == 'error' %}
+                        <div class="bg-error/90 text-white p-3 rounded-xl">
+                            <span class="font-semibold">{{ message }}</span>
+                        </div>
+                    {% else %}
+                        <div class="bg-secondary/90 text-white p-3 rounded-xl">
+                            <span class="font-semibold">{{ message }}</span>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Placeholder for page-specific JS (used in index.html for main.js) -->
+    {% block extra_js %}{% endblock %}
+
+</body>
+</html>

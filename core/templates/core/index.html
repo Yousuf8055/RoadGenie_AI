@@ -1,0 +1,104 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}RoadGenie | AI Smart Map{% endblock %}
+
+{% block content %}
+<div class="h-screen flex flex-col md:flex-row p-4 space-y-4 md:space-y-0 md:space-x-4 bg-background-light">
+    
+    <!-- Map Panel (Left/Top) -->
+    <div class="w-full md:w-3/5 h-1/2 md:h-full flex flex-col animate-in slide-in-from-left-12 duration-500">
+        
+        <!-- Header with Sign Out Button -->
+        <header class="flex items-center justify-between p-2 mb-4 bg-card rounded-xl shadow-soft">
+            <h1 class="text-3xl font-bold text-heading flex items-center">
+                <!-- Icon colored with primary-start -->
+                <svg class="w-8 h-8 mr-2" style="color: #7F5AF0;" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 00.183.954L3 18h14l-.089-.046a1 1 0 00.183-.954l-7-14z" />
+                </svg>
+                RoadGenie <span class="text-sm font-medium ml-2" style="color: #2CBDFE;">AI Active</span>
+            </h1>
+            <!-- Sign Out Link points to the Django logout view -->
+            <a href="{% url 'logout' %}" id="signout-button" 
+                    class="text-muted hover:text-error px-4 py-2 rounded-xl transition duration-150 border border-divider hover:border-error shadow-soft">
+                Sign Out
+            </a>
+        </header>
+        
+        <!-- Map container for Leaflet (OpenStreetMap) -->
+        <div id="map" class="flex-grow min-h-[300px] bg-card rounded-xl shadow-medium"></div>
+
+        <!-- Dynamic Metrics Card (Mock data) -->
+        <div class="mt-4 p-4 bg-card rounded-xl shadow-soft border border-divider">
+            <h2 class="text-lg font-semibold text-heading">Real-Time Metrics (Mock)</h2>
+            <div class="flex flex-col sm:flex-row justify-between mt-3 space-y-2 sm:space-y-0 text-paragraph text-sm">
+                <!-- Status 1: Traffic (Error Red) -->
+                <span class="flex items-center">
+                    <span class="w-2 h-2 rounded-full mr-2 bg-error animate-ping"></span>
+                    Traffic Status: <span class="font-bold ml-1 text-error">Heavy</span>
+                </span>
+                <!-- Status 2: Optimization (Neon Green Success) -->
+                <span class="flex items-center">
+                    <span class="w-2 h-2 rounded-full mr-2 bg-success"></span>
+                    ETA Optimization: <span class="font-bold ml-1 text-success">- 15 mins</span>
+                </span>
+                <!-- Status 3: Fuel Saving (Secondary Blue) -->
+                <span class="flex items-center">
+                    <svg class="w-4 h-4 mr-1" style="color: #2CBDFE;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    Fuel Saving: <span class="font-bold ml-1 text-secondary">3.5%</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Panel (Right/Bottom) -->
+    <div class="w-full md:w-2/5 h-1/2 md:h-full bg-card rounded-xl shadow-medium flex flex-col animate-in slide-in-from-right-12 duration-500">
+        <header class="p-4 border-b border-divider rounded-t-xl">
+            <h2 class="text-xl font-semibold text-heading">Conversational Assistant</h2>
+            <p class="text-sm text-muted">Ask for navigation, music, or road conditions.</p>
+        </header>
+        
+        <!-- Message Display Area (NOW INCLUDES CHAT HISTORY) -->
+        <div id="chat-messages" class="chat-scroll flex-grow overflow-y-auto p-4 flex flex-col space-y-3">
+            
+            <!-- Django loop to render persistent chat history from the database -->
+            {% for message in chat_history %}
+                <!-- Render User's old message -->
+                <div class="chat-message self-end bg-primary-start text-white shadow-soft p-3 rounded-xl text-sm">
+                    {{ message.user_message }}
+                </div>
+                <!-- Render AI's old response -->
+                <div class="chat-message self-start shadow-soft text-sm p-3 rounded-xl bg-background-light text-paragraph">
+                    {{ message.ai_response }}
+                </div>
+            {% endfor %}
+
+            <!-- Initial Welcome Message (Appears after history is loaded) -->
+            <div class="ai-message self-start shadow-soft text-sm p-3 rounded-xl bg-background-light text-paragraph fade-in">
+                Hello! I'm RoadGenie, your AI co-pilot. How can I assist you today?
+            </div>
+        </div>
+
+        <!-- Input Form (Submission handled by main.js) -->
+        <form id="chat-form" class="p-4 border-t border-divider flex space-x-2">
+            <input type="text" id="user-input" placeholder="Type your query here..."
+                   class="flex-grow p-3 border border-divider rounded-xl shadow-soft focus:ring-2 focus:ring-primary-end focus:border-primary-end transition duration-200 text-paragraph"
+                   autocomplete="off" required>
+            <!-- Button uses the custom glowing class 'btn-primary-glow' from style.css -->
+            <button type="submit" id="send-button"
+                    class="btn-primary-glow py-3 px-6 rounded-xl font-semibold flex items-center justify-center">
+                Send
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<!-- Leaflet JS must be included before main.js for map functions to work -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> 
+<!-- Main App logic, which handles map and chat functionality -->
+<script src="{% static 'core/js/main.js' %}"></script>
+{% endblock extra_js %}

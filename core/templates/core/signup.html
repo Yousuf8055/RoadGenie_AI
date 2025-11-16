@@ -1,0 +1,71 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}RoadGenie | Sign Up{% endblock %}
+
+{% block content %}
+<div class="hero-gradient min-h-screen flex items-center justify-center p-4">
+    <div class="bg-card w-full max-w-md mx-auto p-8 rounded-2xl shadow-medium transform transition duration-500 hover:scale-[1.01] animate-in slide-in-from-top-12">
+        
+        <div class="text-center mb-8">
+            <svg class="w-12 h-12 mx-auto text-secondary mb-2" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
+            </svg>
+            <h1 class="text-3xl font-extrabold text-heading">Join RoadGenie</h1>
+            <p class="text-paragraph mt-2">Create your account to start smarter travel.</p>
+        </div>
+
+        <!-- This form submits to the Django view (signup_user) -->
+        <form method="POST" action="{% url 'signup' %}" class="space-y-6">
+            {% csrf_token %}
+            
+            <!-- Render the form fields dynamically. The view sends the form object. -->
+            {% for field in form %}
+                {% if field.name == 'username' %}
+                    <!-- We use email as the primary identifier, so we change the username label/type -->
+                    <div>
+                        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-muted mb-2">Email Address (Used as Username)</label>
+                        <input type="email" name="{{ field.name }}" id="{{ field.id_for_label }}" required
+                               class="w-full p-3 border border-divider rounded-xl shadow-soft focus:border-primary-end focus:ring-1 focus:ring-primary-end transition duration-200 text-paragraph bg-background-light"
+                               autocomplete="email">
+                        {% for error in field.errors %}
+                            <p class="text-error text-xs mt-1">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% elif field.name == 'email' %}
+                    <!-- Hide the default email field since we're using username for email -->
+                    <input type="hidden" name="{{ field.name }}" value="{{ field.value|default:'' }}">
+                {% else %}
+                    <div>
+                        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-muted mb-2">{{ field.label }}</label>
+                        <!-- Render other fields (like password fields) -->
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <p class="text-error text-xs mt-1">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            
+            <!-- Apply Tailwind styles to the default password inputs -->
+            <style>
+                /* Target the default fields rendered by Django form helper */
+                #id_password1, #id_password2 {
+                    @apply w-full p-3 border border-divider rounded-xl shadow-soft focus:border-primary-end focus:ring-1 focus:ring-primary-end transition duration-200 text-paragraph bg-background-light;
+                }
+            </style>
+
+            <button type="submit"
+                    class="btn-primary-glow w-full py-3 px-6 rounded-xl text-lg font-bold tracking-wider mt-6">
+                Sign Up
+            </button>
+        </form>
+
+        <p class="mt-8 text-center text-paragraph text-sm">
+            Already have an account? 
+            <a href="{% url 'login' %}" class="text-primary-end font-semibold hover:underline transition duration-150">Login Here</a>
+        </p>
+
+    </div>
+</div>
+{% endblock content %}
